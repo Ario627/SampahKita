@@ -47,6 +47,22 @@ npm run watch      # Tailwind rebuild otomatis saat file berubah
 
 Tailwind dipilih dengan sengaja: CLI resmi (`@tailwindcss/cli`) dengan versi terkunci di `package.json`, tanpa CDN, tanpa aset eksternal selain Google Fonts (Fraunces, Instrument Sans, Space Mono).
 
+## Deploy (Vercel)
+
+Konfigurasi sudah disediakan di `vercel.json`, jadi cukup hubungkan repositori ke Vercel tanpa mengatur apa pun lagi:
+
+- Build command: `npm run build:dist` (kompilasi Tailwind + salin situs ke `dist/`)
+- Output directory: `dist`
+
+Ingin cek hasil produksi secara lokal sebelum deploy:
+
+```bash
+npm run build:dist
+npm run serve:dist   # http://localhost:5173 dari folder dist/
+```
+
+Deploy statis murni — tidak ada server, fungsi, atau environment variable yang dibutuhkan.
+
 ## Struktur proyek
 
 ```text
