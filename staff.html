@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dashboard petugas — SampahKita</title>
+    <meta
+      name="description"
+      content="Dashboard simulasi petugas: statistik laporan, pencarian, filter, dan pengelolaan status penanganan."
+    />
+    <link rel="icon" href="src/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,WONK@0,9..144,300..900,0..1;1,9..144,300..900,0..1&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/css/output.css" />
+  </head>
+  <body data-page="staff">
+    <a class="skip-link" href="#konten">Lewati ke konten</a>
+    <div class="notice-strip">
+      <p class="container-x text-center">Simulasi — data hanya tersimpan di browser ini</p>
+    </div>
+    <header class="border-b-2 border-ink bg-paper">
+      <div class="container-x flex flex-wrap items-center justify-between gap-x-6 gap-y-3 py-4">
+        <a class="wordmark" href="index.html">SampahKita<span class="wordmark-dot">.</span></a>
+        <p class="hidden font-mono text-[0.6rem] font-bold uppercase tracking-[0.18em] text-ink-faint lg:block">
+          Log kebersihan sekolah — prototipe
+        </p>
+        <div class="flex items-center gap-3">
+          <span class="hidden font-mono text-[0.58rem] font-bold uppercase tracking-[0.14em] text-ink-faint sm:block">
+            Mode (simulasi)
+          </span>
+          <div class="mode-switch" role="group" aria-label="Mode penggunaan, hanya simulasi">
+            <button type="button" data-mode="student">Siswa</button>
+            <button type="button" data-mode="staff">Petugas</button>
+          </div>
+        </div>
+      </div>
+      <nav class="border-t border-line" aria-label="Navigasi utama">
+        <div class="container-x no-scrollbar flex items-center gap-6 overflow-x-auto">
+          <a class="nav-link shrink-0" data-nav="index" href="index.html">Beranda</a>
+          <a class="nav-link shrink-0" data-nav="reports" href="reports.html">Daftar laporan</a>
+          <a class="nav-link shrink-0" data-nav="staff" href="staff.html">Dashboard petugas</a>
+          <a class="nav-cta my-2.5 ml-auto shrink-0" data-nav="report" href="report.html">+ Buat laporan</a>
+        </div>
+      </nav>
+    </header>
+    <main id="konten">
+      <div id="staff-gate" hidden>
+        <div class="container-x flex justify-center py-20">
+          <div class="card w-full max-w-xl p-7 sm:p-9">
+            <p class="eyebrow">Akses simulasi</p>
+            <h1 class="mt-3 font-display text-[1.8rem] leading-tight">Aktifkan mode petugas.</h1>
+            <p class="mt-4 text-[0.9rem] leading-relaxed text-ink-soft">
+              Dashboard pengelolaan hanya tampil dalam mode petugas. Pemilih mode hanyalah simulasi antarmuka —
+              tidak ada autentikasi atau keamanan di baliknya.
+            </p>
+            <div class="mt-8 flex flex-wrap gap-3">
+              <button type="button" class="btn btn-primary" data-action="activate-staff">
+                Aktifkan mode petugas
+              </button>
+              <a class="btn btn-ghost" href="reports.html">Kembali ke daftar laporan</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="staff-app" hidden>
+        <div class="border-b border-line bg-card">
+          <div class="container-x flex flex-wrap items-end justify-between gap-6 py-10 md:py-12">
+            <div>
+              <p class="eyebrow">Dashboard petugas · simulasi</p>
+              <h1 class="mt-3 font-display text-[2rem] leading-tight sm:text-[2.5rem]">
+                Kelola laporan kebersihan.
+              </h1>
+              <p class="mt-4 text-[0.92rem] leading-relaxed text-ink-soft">
+                Tinjau, prioritaskan, perbarui status, dan tulis catatan.
+              </p>
+            </div>
+            <button type="button" class="btn btn-quiet" data-action="empty-reports">
+              Kosongkan data (uji tampilan kosong)
+            </button>
+          </div>
+        </div>
+        <div class="container-x py-10">
+          <h2 class="sr-only">Statistik laporan</h2>
+          <div id="stat-grid" class="grid grid-cols-2 gap-3 sm:grid-cols-4 xl:grid-cols-7"></div>
+          <div class="mt-9 flex flex-col gap-4 border-b border-line pb-7">
+            <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_11rem_11rem_10rem_12rem]">
+              <div>
+                <label class="sr-only" for="search-input">Cari laporan</label>
+                <input
+                  id="search-input"
+                  type="search"
+                  class="input"
+                  placeholder="Cari ID, judul, lokasi, kategori…"
+                />
+              </div>
+              <div>
+                <label class="sr-only" for="status-filter">Filter status</label>
+                <select id="status-filter" class="input"></select>
+              </div>
+              <div>
+                <label class="sr-only" for="category-filter">Filter kategori</label>
+                <select id="category-filter" class="input"></select>
+              </div>
+              <div>
+                <label class="sr-only" for="priority-filter">Filter prioritas</label>
+                <select id="priority-filter" class="input"></select>
+              </div>
+              <div>
+                <label class="sr-only" for="sort-filter">Urutkan</label>
+                <select id="sort-filter" class="input"></select>
+              </div>
+            </div>
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <p id="result-count" class="hint" aria-live="polite"></p>
+              <div class="flex flex-wrap items-center gap-2">
+                <button type="button" id="clear-filters" class="btn btn-quiet btn-sm" hidden>Bersihkan filter</button>
+                <button type="button" id="export-button" class="btn btn-ghost btn-sm">Ekspor CSV</button>
+              </div>
+            </div>
+          </div>
+          <div id="staff-list" class="mt-7"></div>
+        </div>
+      </div>
+    </main>
+    <dialog id="manage-dialog" class="drawer" aria-labelledby="drawer-title">
+      <div class="flex h-full flex-col">
+        <header class="flex items-start justify-between gap-4 border-b-2 border-ink bg-paper-deep px-5 py-4">
+          <div class="min-w-0">
+            <p class="eyebrow">Kelola laporan</p>
+            <h2 id="drawer-title" class="mt-1.5 truncate font-display text-[1.1rem] leading-snug"></h2>
+          </div>
+          <button type="button" class="btn btn-quiet btn-sm shrink-0" data-drawer-close>Tutup</button>
+        </header>
+        <div id="drawer-body" class="flex-1 overflow-y-auto px-5 py-6"></div>
+      </div>
+    </dialog>
+    <footer class="border-t-2 border-ink bg-paper-deep">
+      <div class="container-x flex flex-wrap items-center justify-between gap-x-8 gap-y-5 py-8">
+        <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+          <a class="wordmark" href="index.html">SampahKita<span class="wordmark-dot">.</span></a>
+          <p class="hint">Prototipe simulasi — tanpa backend, data lokal.</p>
+        </div>
+        <nav class="flex flex-wrap items-center gap-x-6 gap-y-2" aria-label="Navigasi footer">
+          <a class="footer-link" href="index.html">Beranda</a>
+          <a class="footer-link" href="report.html">Buat laporan</a>
+          <a class="footer-link" href="reports.html">Daftar laporan</a>
+          <a class="footer-link" href="staff.html">Dashboard petugas</a>
+        </nav>
+        <div class="flex flex-wrap items-center gap-4">
+          <button type="button" class="btn btn-ghost btn-sm" data-action="reset-demo">Reset data demo</button>
+          <p class="hint">© <span data-current-year>2026</span> SampahKita</p>
+        </div>
+      </div>
+    </footer>
+    <script type="module" src="src/js/pages/staff-dashboard.js"></script>
+  </body>
+</html>

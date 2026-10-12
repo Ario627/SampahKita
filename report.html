@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Buat laporan — SampahKita</title>
+    <meta
+      name="description"
+      content="Formulir pelaporan masalah kebersihan di lingkungan sekolah. Data disimpan lokal di browser sebagai simulasi."
+    />
+    <link rel="icon" href="src/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,WONK@0,9..144,300..900,0..1;1,9..144,300..900,0..1&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/css/output.css" />
+  </head>
+  <body data-page="report">
+    <a class="skip-link" href="#konten">Lewati ke konten</a>
+    <div class="notice-strip">
+      <p class="container-x text-center">Simulasi — data hanya tersimpan di browser ini</p>
+    </div>
+    <header class="border-b-2 border-ink bg-paper">
+      <div class="container-x flex flex-wrap items-center justify-between gap-x-6 gap-y-3 py-4">
+        <a class="wordmark" href="index.html">SampahKita<span class="wordmark-dot">.</span></a>
+        <p class="hidden font-mono text-[0.6rem] font-bold uppercase tracking-[0.18em] text-ink-faint lg:block">
+          Log kebersihan sekolah — prototipe
+        </p>
+        <div class="flex items-center gap-3">
+          <span class="hidden font-mono text-[0.58rem] font-bold uppercase tracking-[0.14em] text-ink-faint sm:block">
+            Mode (simulasi)
+          </span>
+          <div class="mode-switch" role="group" aria-label="Mode penggunaan, hanya simulasi">
+            <button type="button" data-mode="student">Siswa</button>
+            <button type="button" data-mode="staff">Petugas</button>
+          </div>
+        </div>
+      </div>
+      <nav class="border-t border-line" aria-label="Navigasi utama">
+        <div class="container-x no-scrollbar flex items-center gap-6 overflow-x-auto">
+          <a class="nav-link shrink-0" data-nav="index" href="index.html">Beranda</a>
+          <a class="nav-link shrink-0" data-nav="reports" href="reports.html">Daftar laporan</a>
+          <a class="nav-link shrink-0" data-nav="staff" href="staff.html">Dashboard petugas</a>
+          <a class="nav-cta my-2.5 ml-auto shrink-0" data-nav="report" href="report.html">+ Buat laporan</a>
+        </div>
+      </nav>
+    </header>
+    <main id="konten">
+      <div class="border-b border-line bg-card">
+        <div class="container-x py-12 md:py-14">
+          <p class="eyebrow">Buat laporan</p>
+          <h1 class="mt-3 max-w-2xl font-display text-[2rem] leading-tight sm:text-[2.5rem]">
+            Laporkan masalah kebersihan.
+          </h1>
+          <p class="mt-4 max-w-2xl text-[0.92rem] leading-relaxed text-ink-soft">
+            Isi lokasi dan kategori. Deskripsi membantu petugas memahami kondisi sebelum turun ke lokasi.
+          </p>
+        </div>
+      </div>
+      <div class="container-x grid gap-12 py-12 lg:grid-cols-[1.45fr_0.55fr] lg:gap-14 lg:py-16">
+        <div class="min-w-0">
+          <div id="form-summary" class="error-summary mb-8" hidden>
+            <p class="font-mono text-[0.64rem] font-bold uppercase tracking-[0.12em] text-rust">
+              Periksa kembali isian berikut
+            </p>
+            <ul id="form-summary-list" class="mt-2.5 space-y-1.5 text-[0.84rem] text-rust"></ul>
+          </div>
+          <div id="form-panel">
+            <form id="report-form" novalidate class="space-y-8">
+              <div>
+                <label class="field-label" for="nickname"><span>Nama panggilan · opsional</span></label>
+                <input
+                  class="input"
+                  id="nickname"
+                  name="nickname"
+                  type="text"
+                  maxlength="40"
+                  autocomplete="nickname"
+                  placeholder="Contoh: Rani"
+                />
+                <p class="hint mt-1.5">Cukup nama panggilan — tanpa data pribadi.</p>
+                <p class="field-error" id="nickname-error" hidden></p>
+              </div>
+              <div>
+                <label class="field-label" for="location"><span>Lokasi · wajib</span></label>
+                <select class="input" id="location" name="location" aria-describedby="location-error">
+                  <option value="">Pilih lokasi…</option>
+                </select>
+                <p class="field-error" id="location-error" hidden></p>
+                <div id="custom-location-wrap" class="mt-4" hidden>
+                  <label class="field-label" for="custom-location">
+                    <span>Tulis lokasi manual · wajib saat memilih “Lainnya”</span>
+                  </label>
+                  <input
+                    class="input"
+                    id="custom-location"
+                    name="customLocation"
+                    type="text"
+                    maxlength="80"
+                    placeholder="Contoh: dekat gerbang samping"
+                  />
+                  <p class="field-error" id="customLocation-error" hidden></p>
+                </div>
+              </div>
+              <fieldset>
+                <legend class="field-label w-full"><span>Kategori · wajib</span></legend>
+                <div id="category-group" class="flex flex-wrap gap-2.5"></div>
+                <p class="field-error" id="category-error" hidden></p>
+              </fieldset>
+              <div>
+                <div class="field-label">
+                  <label for="title"><span>Judul singkat · wajib</span></label>
+                  <span class="char-count" id="title-counter">0/80</span>
+                </div>
+                <input
+                  class="input"
+                  id="title"
+                  type="text"
+                  maxlength="80"
+                  placeholder="Contoh: Tempat sampah kantin penuh sejak pagi"
+                  aria-describedby="title-error"
+                />
+                <p class="field-error" id="title-error" hidden></p>
+              </div>
+              <div>
+                <div class="field-label">
+                  <label for="description"><span>Deskripsi · wajib</span></label>
+                  <span class="char-count" id="description-counter">0/500</span>
+                </div>
+                <textarea
+                  class="input"
+                  id="description"
+                  rows="6"
+                  maxlength="500"
+                  placeholder="Jelaskan kondisi apa adanya: apa yang terlihat, seberapa banyak, dan sejak kapan."
+                  aria-describedby="description-error"
+                ></textarea>
+                <p class="field-error" id="description-error" hidden></p>
+              </div>
+              <div>
+                <p class="field-label"><span>Foto · opsional</span></p>
+                <div class="flex flex-wrap items-center gap-3">
+                  <label class="btn btn-ghost cursor-pointer" for="photo-input">Pilih foto</label>
+                  <input class="sr-only" type="file" id="photo-input" accept="image/jpeg,image/png,image/webp" />
+                  <p class="hint">JPG, PNG, atau WebP · maksimal 3 MB</p>
+                </div>
+                <p class="field-error" id="photo-error" hidden></p>
+                <div id="photo-preview" class="mt-4" hidden></div>
+              </div>
+              <div>
+                <div class="field-label">
+                  <label for="extra-note"><span>Catatan tambahan · opsional</span></label>
+                  <span class="char-count" id="extra-note-counter">0/200</span>
+                </div>
+                <textarea
+                  class="input"
+                  id="extra-note"
+                  rows="3"
+                  maxlength="200"
+                  placeholder="Contoh: patokan tambahan, akses lokasi, atau waktu kejadian."
+                ></textarea>
+                <p class="field-error" id="extraNote-error" hidden></p>
+              </div>
+              <div class="flex flex-wrap items-center gap-3 border-t border-line pt-7">
+                <button type="submit" id="submit-button" class="btn btn-primary">Kirim laporan</button>
+                <button type="button" id="clear-button" class="btn btn-ghost">Bersihkan formulir</button>
+                <p class="hint ml-auto">Tersimpan di browser ini — tidak diunggah ke server.</p>
+              </div>
+            </form>
+          </div>
+          <div id="success-panel" hidden>
+            <div class="card">
+              <div class="border-b-2 border-ink bg-fern px-6 py-8 sm:px-9">
+                <span class="stamp" data-tone="moss">Terkirim</span>
+                <h2 class="mt-5 font-display text-[1.7rem] leading-tight sm:text-[2rem]">
+                  Laporan kamu tercatat.
+                </h2>
+                <p class="mt-3 max-w-lg text-[0.9rem] leading-relaxed text-ink-soft">
+                  Simpan ID ini untuk mencari laporannya kembali.
+                </p>
+              </div>
+              <div class="px-6 py-7 sm:px-9">
+                <p class="eyebrow">ID laporan</p>
+                <p class="mt-2 font-mono text-[1.4rem] font-bold tracking-[0.06em]" id="success-id">SK-0000-000</p>
+                <div class="mt-7 flex flex-wrap gap-3">
+                  <a class="btn btn-primary" id="success-link" href="reports.html">Lihat detail laporan</a>
+                  <button type="button" class="btn btn-ghost" id="success-again">Buat laporan lain</button>
+                </div>
+                <p class="hint mt-7">Tidak terkirim ke petugas sungguhan — data hanya di browser ini.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <aside class="lg:pt-1">
+          <div class="card-flat p-5">
+            <p class="eyebrow">Panduan singkat</p>
+            <ul class="mt-4 space-y-3 text-[0.84rem] leading-relaxed text-ink-soft">
+              <li class="flex gap-3">
+                <span class="font-mono text-[0.6rem] font-bold text-ink-faint">01</span>
+                Sertakan patokan lokasi yang mudah dikenali.
+              </li>
+              <li class="flex gap-3">
+                <span class="font-mono text-[0.6rem] font-bold text-ink-faint">02</span>
+                Deskripsikan kondisi apa adanya.
+              </li>
+              <li class="flex gap-3">
+                <span class="font-mono text-[0.6rem] font-bold text-ink-faint">03</span>
+                Nama panggilan boleh dikosongkan.
+              </li>
+              <li class="flex gap-3">
+                <span class="font-mono text-[0.6rem] font-bold text-ink-faint">04</span>
+                Foto tersimpan lokal di browser ini.
+              </li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </main>
+    <footer class="border-t-2 border-ink bg-paper-deep">
+      <div class="container-x flex flex-wrap items-center justify-between gap-x-8 gap-y-5 py-8">
+        <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+          <a class="wordmark" href="index.html">SampahKita<span class="wordmark-dot">.</span></a>
+          <p class="hint">Prototipe simulasi — tanpa backend, data lokal.</p>
+        </div>
+        <nav class="flex flex-wrap items-center gap-x-6 gap-y-2" aria-label="Navigasi footer">
+          <a class="footer-link" href="index.html">Beranda</a>
+          <a class="footer-link" href="report.html">Buat laporan</a>
+          <a class="footer-link" href="reports.html">Daftar laporan</a>
+          <a class="footer-link" href="staff.html">Dashboard petugas</a>
+        </nav>
+        <div class="flex flex-wrap items-center gap-4">
+          <button type="button" class="btn btn-ghost btn-sm" data-action="reset-demo">Reset data demo</button>
+          <p class="hint">© <span data-current-year>2026</span> SampahKita</p>
+        </div>
+      </div>
+    </footer>
+    <script type="module" src="src/js/pages/create-report.js"></script>
+  </body>
+</html>

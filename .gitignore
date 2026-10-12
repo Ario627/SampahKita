@@ -1,0 +1,4 @@
+node_modules/
+dist/
+.env
+./SampahKita_Product_Technical_Specification.md

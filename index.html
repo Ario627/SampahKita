@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SampahKita — Laporkan dan pantau kebersihan sekolah</title>
+    <meta
+      name="description"
+      content="Prototipe pelaporan dan pemantauan penanganan sampah di lingkungan sekolah. Data simulasi tersimpan di browser."
+    />
+    <link rel="icon" href="src/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,WONK@0,9..144,300..900,0..1;1,9..144,300..900,0..1&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/css/output.css" />
+  </head>
+  <body data-page="index">
+    <a class="skip-link" href="#konten">Lewati ke konten</a>
+    <div class="notice-strip">
+      <p class="container-x text-center">Simulasi — data hanya tersimpan di browser ini</p>
+    </div>
+    <header class="border-b-2 border-ink bg-paper">
+      <div class="container-x flex flex-wrap items-center justify-between gap-x-6 gap-y-3 py-4">
+        <a class="wordmark" href="index.html">SampahKita<span class="wordmark-dot">.</span></a>
+        <p class="hidden font-mono text-[0.6rem] font-bold uppercase tracking-[0.18em] text-ink-faint lg:block">
+          Log kebersihan sekolah — prototipe
+        </p>
+        <div class="flex items-center gap-3">
+          <span class="hidden font-mono text-[0.58rem] font-bold uppercase tracking-[0.14em] text-ink-faint sm:block">
+            Mode (simulasi)
+          </span>
+          <div class="mode-switch" role="group" aria-label="Mode penggunaan, hanya simulasi">
+            <button type="button" data-mode="student">Siswa</button>
+            <button type="button" data-mode="staff">Petugas</button>
+          </div>
+        </div>
+      </div>
+      <nav class="border-t border-line" aria-label="Navigasi utama">
+        <div class="container-x no-scrollbar flex items-center gap-6 overflow-x-auto">
+          <a class="nav-link shrink-0" data-nav="index" href="index.html">Beranda</a>
+          <a class="nav-link shrink-0" data-nav="reports" href="reports.html">Daftar laporan</a>
+          <a class="nav-link shrink-0" data-nav="staff" href="staff.html">Dashboard petugas</a>
+          <a class="nav-cta my-2.5 ml-auto shrink-0" data-nav="report" href="report.html">+ Buat laporan</a>
+        </div>
+      </nav>
+    </header>
+    <main id="konten">
+      <section class="relative overflow-hidden border-b border-line">
+        <div class="dotgrid pointer-events-none absolute inset-0" aria-hidden="true"></div>
+        <div class="container-x relative grid gap-12 py-14 md:py-16 lg:grid-cols-[1.08fr_0.92fr] lg:gap-14">
+          <div>
+            <p class="eyebrow">Prototipe simulasi · kebersihan sekolah</p>
+            <h1
+              class="mt-5 text-balance font-display text-[2.5rem] leading-[1.04] tracking-[-0.015em] sm:text-[3.1rem] lg:text-[3.5rem]"
+            >
+              Bersama jaga lingkungan sekolah tetap <em class="italic text-moss">bersih</em>.
+            </h1>
+            <p class="mt-6 max-w-md text-[0.95rem] leading-relaxed text-ink-soft">
+              Laporkan masalah kebersihan dengan lokasi dan deskripsi singkat. Petugas menindaklanjuti, kamu
+              memantau statusnya.
+            </p>
+            <div class="mt-8 flex flex-wrap gap-3.5">
+              <a class="btn btn-primary" href="report.html">Buat laporan</a>
+              <a class="btn btn-ghost" href="reports.html">Lihat semua laporan</a>
+            </div>
+            <dl class="hero-stats mt-10" id="hero-stats"></dl>
+          </div>
+          <aside class="min-w-0 lg:pt-2">
+            <div class="card shadow-[7px_7px_0_0_var(--color-line-strong)]">
+              <div class="flex items-center justify-between gap-3 border-b-2 border-ink bg-paper-deep px-4 py-3">
+                <p class="eyebrow">Papan pantau</p>
+                <span class="flex items-center gap-2 font-mono text-[0.56rem] font-bold uppercase tracking-[0.12em] text-ink-faint">
+                  <span class="live-dot" aria-hidden="true"></span>ikut berubah
+                </span>
+              </div>
+              <div id="dist-list"></div>
+              <div class="flex items-center justify-between gap-3 border-y border-line bg-paper-deep px-4 py-2.5">
+                <p class="eyebrow">Laporan terbaru</p>
+                <a class="link-arrow" href="reports.html">
+                  <span>Semua</span><span class="link-arrow-mark" aria-hidden="true">→</span>
+                </a>
+              </div>
+              <div id="recent-list"></div>
+              <p class="hint border-t border-line px-4 py-3" id="recent-meta"></p>
+            </div>
+          </aside>
+        </div>
+      </section>
+      <section class="border-b border-line bg-paper-deep/60">
+        <div class="container-x py-14 md:py-16">
+          <div class="flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <p class="eyebrow">Peta sebaran</p>
+              <h2 class="section-title max-w-lg">Area mana yang paling sering dilaporkan?</h2>
+            </div>
+            <p class="max-w-xs text-[0.85rem] leading-relaxed text-ink-soft">
+              Klik area atau kategori untuk membuka laporannya.
+            </p>
+          </div>
+          <div class="mt-10 grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:gap-14">
+            <div>
+              <div id="area-grid" class="area-grid"></div>
+            </div>
+            <div class="min-w-0">
+              <h3 class="font-mono text-[0.62rem] font-bold uppercase tracking-[0.16em] text-ink-soft">
+                Kategori terbanyak
+              </h3>
+              <div id="category-bars" class="mt-5"></div>
+              <h3 class="mt-9 font-mono text-[0.62rem] font-bold uppercase tracking-[0.16em] text-ink-soft">
+                Masuk 7 hari terakhir
+              </h3>
+              <div
+                id="trend-chart"
+                class="trend mt-5"
+                role="img"
+                aria-label="Jumlah laporan masuk per hari selama tujuh hari terakhir"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="border-b border-line bg-card">
+        <div class="container-x py-14 md:py-16">
+          <div class="flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <p class="eyebrow">Cara kerja</p>
+              <h2 class="section-title max-w-md">Tiga langkah dari laporan ke tindakan.</h2>
+            </div>
+          </div>
+          <ol class="mt-12 grid gap-px border border-line bg-line md:grid-cols-3">
+            <li class="bg-card p-6 sm:p-8">
+              <span class="font-display text-[2.6rem] leading-none text-moss">01</span>
+              <h3 class="mt-5 font-display text-[1.15rem]">Laporkan</h3>
+              <p class="mt-2.5 text-[0.85rem] leading-relaxed text-ink-soft">
+                Pilih lokasi dan kategori, tulis judul dan deskripsi singkat.
+              </p>
+            </li>
+            <li class="bg-card p-6 sm:p-8">
+              <span class="font-display text-[2.6rem] leading-none text-moss">02</span>
+              <h3 class="mt-5 font-display text-[1.15rem]">Ditangani</h3>
+              <p class="mt-2.5 text-[0.85rem] leading-relaxed text-ink-soft">
+                Petugas meninjau, menentukan prioritas, dan memperbarui status.
+              </p>
+            </li>
+            <li class="bg-card p-6 sm:p-8">
+              <span class="font-display text-[2.6rem] leading-none text-moss">03</span>
+              <h3 class="mt-5 font-display text-[1.15rem]">Pantau</h3>
+              <p class="mt-2.5 text-[0.85rem] leading-relaxed text-ink-soft">
+                Ikuti status dan riwayat sampai laporan selesai.
+              </p>
+            </li>
+          </ol>
+        </div>
+      </section>
+      <section class="border-b border-line">
+        <div class="container-x py-14 md:py-16">
+          <div class="flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <p class="eyebrow">Peta status</p>
+              <h2 class="section-title max-w-xl">Lima status, satu alur yang jelas.</h2>
+            </div>
+          </div>
+          <ol class="status-band mt-10">
+            <li class="status-band-item">
+              <span class="glyph text-[1.1rem]" data-status="SUBMITTED" aria-hidden="true"></span>
+              <h3 class="font-display text-[1rem] font-medium">Baru Dilaporkan</h3>
+              <p class="text-[0.82rem] leading-relaxed text-ink-soft">Menunggu peninjauan petugas.</p>
+              <span class="status-count" data-status-count="SUBMITTED">—</span>
+            </li>
+            <li class="status-band-item">
+              <span class="glyph text-[1.1rem]" data-status="REVIEWED" aria-hidden="true"></span>
+              <h3 class="font-display text-[1rem] font-medium">Telah Ditinjau</h3>
+              <p class="text-[0.82rem] leading-relaxed text-ink-soft">Sudah dibaca petugas.</p>
+              <span class="status-count" data-status-count="REVIEWED">—</span>
+            </li>
+            <li class="status-band-item">
+              <span class="glyph text-[1.1rem]" data-status="IN_PROGRESS" aria-hidden="true"></span>
+              <h3 class="font-display text-[1rem] font-medium">Sedang Ditangani</h3>
+              <p class="text-[0.82rem] leading-relaxed text-ink-soft">Penanganan berjalan di lokasi.</p>
+              <span class="status-count" data-status-count="IN_PROGRESS">—</span>
+            </li>
+            <li class="status-band-item">
+              <span class="glyph text-[1.1rem]" data-status="RESOLVED" aria-hidden="true"></span>
+              <h3 class="font-display text-[1rem] font-medium">Selesai</h3>
+              <p class="text-[0.82rem] leading-relaxed text-ink-soft">Masalah sudah ditangani.</p>
+              <span class="status-count" data-status-count="RESOLVED">—</span>
+            </li>
+            <li class="status-band-item">
+              <span class="glyph text-[1.1rem]" data-status="REJECTED" aria-hidden="true"></span>
+              <h3 class="font-display text-[1rem] font-medium">Tidak Dapat Ditindaklanjuti</h3>
+              <p class="text-[0.82rem] leading-relaxed text-ink-soft">
+                Tidak dapat diproses — alasan selalu ditampilkan.
+              </p>
+              <span class="status-count" data-status-count="REJECTED">—</span>
+            </li>
+          </ol>
+          <p class="hint mt-5">
+            Tidak Dapat Ditindaklanjuti adalah cabang dari dua status awal dan wajib disertai alasan tertulis.
+          </p>
+        </div>
+      </section>
+      <section class="bg-ink text-paper">
+        <div class="container-x py-14 md:py-16">
+          <p class="font-mono text-[0.62rem] font-bold uppercase tracking-[0.18em] text-fern/60">
+            Yang perlu kamu tahu
+          </p>
+          <h2 class="mt-3 max-w-xl font-display text-[1.85rem] leading-tight sm:text-[2.35rem]">
+            Tanpa klaim berlebihan.
+          </h2>
+          <div class="mt-10 grid gap-px bg-paper/15 md:grid-cols-3">
+            <div class="bg-ink p-6">
+              <span class="font-mono text-[0.62rem] font-bold tracking-[0.2em] text-fern/60">01</span>
+              <h3 class="mt-3 font-display text-[1.05rem] text-paper">Tersimpan lokal</h3>
+              <p class="mt-2 text-[0.84rem] leading-relaxed text-paper/70">
+                Data hidup di localStorage browser ini. Bersihkan data browser, laporan hilang.
+              </p>
+            </div>
+            <div class="bg-ink p-6">
+              <span class="font-mono text-[0.62rem] font-bold tracking-[0.2em] text-fern/60">02</span>
+              <h3 class="mt-3 font-display text-[1.05rem] text-paper">Mode petugas bukan keamanan</h3>
+              <p class="mt-2 text-[0.84rem] leading-relaxed text-paper/70">
+                Pemilih mode hanya simulasi antarmuka, bukan autentikasi.
+              </p>
+            </div>
+            <div class="bg-ink p-6">
+              <span class="font-mono text-[0.62rem] font-bold tracking-[0.2em] text-fern/60">03</span>
+              <h3 class="mt-3 font-display text-[1.05rem] text-paper">Tidak ada pengiriman nyata</h3>
+              <p class="mt-2 text-[0.84rem] leading-relaxed text-paper/70">
+                Laporan tidak terkirim ke petugas atau server mana pun.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="border-t-2 border-ink bg-paper-deep">
+      <div class="container-x flex flex-wrap items-center justify-between gap-x-8 gap-y-5 py-8">
+        <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+          <a class="wordmark" href="index.html">SampahKita<span class="wordmark-dot">.</span></a>
+          <p class="hint">Prototipe simulasi — tanpa backend, data lokal.</p>
+        </div>
+        <nav class="flex flex-wrap items-center gap-x-6 gap-y-2" aria-label="Navigasi footer">
+          <a class="footer-link" href="index.html">Beranda</a>
+          <a class="footer-link" href="report.html">Buat laporan</a>
+          <a class="footer-link" href="reports.html">Daftar laporan</a>
+          <a class="footer-link" href="staff.html">Dashboard petugas</a>
+        </nav>
+        <div class="flex flex-wrap items-center gap-4">
+          <button type="button" class="btn btn-ghost btn-sm" data-action="reset-demo">Reset data demo</button>
+          <p class="hint">© <span data-current-year>2026</span> SampahKita</p>
+        </div>
+      </div>
+    </footer>
+    <script type="module" src="src/js/pages/home.js"></script>
+  </body>
+</html>
